@@ -1,8 +1,8 @@
-require 'csv'
+require "csv"
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update]
-  before_action :authorize_user!, only: [:show, :edit, :update]
+  before_action :set_user, only: [ :show, :edit, :update ]
+  before_action :authorize_user!, only: [ :show, :edit, :update ]
 
   def index
     @users = User.all
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data generate_csv(@orders), filename: "orders-#{Date.today}.csv" }
-    end    
+    end
   end
 
   def edit
@@ -33,9 +33,9 @@ class UsersController < ApplicationController
 
   def generate_csv(orders)
     CSV.generate(headers: true) do |csv|
-      csv << ["Order ID", "Status", "Date", "Total Price"]
+      csv << [ "Order ID", "Status", "Date", "Total Price" ]
       orders.each do |order|
-        csv << [order.id, order.status, order.created_at, order.total_price]
+        csv << [ order.id, order.status, order.created_at, order.total_price ]
       end
     end
   end

@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  
   enum :role, { customer: 0, admin: 1 }
 
   devise :database_authenticatable, :registerable,
@@ -7,8 +6,8 @@ class User < ApplicationRecord
 
 
   has_many :orders
-  has_one :cart     
-  
+  has_one :cart
+
   after_initialize do
     self.role ||= "customer" if new_record?
   end

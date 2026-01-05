@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-
   devise_for :users
 
-  resources :books, only: [:index, :show]
-  resources :users, only: [:show, :edit, :update]
-  resources :orders, only: [:show]
+  resources :books, only: [ :index, :show ]
+  resources :users, only: [ :show, :edit, :update ]
+  resources :orders, only: [ :show ]
 
   root "books#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
