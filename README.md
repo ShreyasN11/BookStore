@@ -10,6 +10,6 @@
 
 6. Create a purchase flow. (add to cart and quick buy)
 
-7. Create a CSV download option for the customer in profile, for all the orders he made(book, author, price, description)
+7. Create a CSV download option for the customer in profile, for all the orders he made(book, author, price, description) - CSV Download Working
 
 8. Write tests (rspec).

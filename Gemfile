@@ -73,3 +73,5 @@ gem "faraday"
 
 gem "sidekiq"
 gem "sidekiq-cron"
+
+gem "csv"
