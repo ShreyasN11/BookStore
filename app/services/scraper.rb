@@ -3,7 +3,7 @@ class Scraper
   
     def call
       response = Faraday.get(BASE_URL, {
-        q: "programming"
+        q: "India"
       })
   
       data = JSON.parse(response.body)

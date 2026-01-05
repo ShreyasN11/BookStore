@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   get "users/update"
   devise_for :users
 
+  get "books/index"
+  get "books/show"
+
   root "books#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
