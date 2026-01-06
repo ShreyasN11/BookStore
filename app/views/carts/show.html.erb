@@ -4,7 +4,6 @@
   <% if @cart_items.any? %>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
       
-      <!-- Items List -->
       <div class="lg:col-span-2 space-y-6">
         <% @cart_items.each do |item| %>
           <div class="flex gap-6 p-6 bg-white border border-stone-200 rounded-3xl shadow-sm">
@@ -34,7 +33,6 @@
         <% end %>
       </div>
 
-      <!-- Order Summary Card -->
       <div class="lg:col-span-1">
         <div class="bg-stone-900 rounded-3xl p-8 text-white sticky top-24 shadow-xl shadow-stone-900/20">
           <h2 class="text-xl font-serif mb-6">Summary</h2>

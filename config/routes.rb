@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   resources :cart_items, only: [ :create, :update, :destroy ]
   resource :cart, only: [ :show ]
 
+  namespace :admin do
+    resources :books
+    root to: "books#index"
+  end
+
   root "books#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

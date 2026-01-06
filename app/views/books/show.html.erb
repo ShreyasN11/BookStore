@@ -1,5 +1,4 @@
 <div class="max-w-6xl mx-auto px-4 py-12">
-  <!-- Breadcrumb -->
   <nav class="mb-8">
     <%= link_to books_path, class: "text-stone-400 hover:text-stone-600 text-sm font-medium inline-flex items-center gap-2 transition" do %>
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -11,44 +10,61 @@
 
   <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
     
-    <!-- Left Column: Book Cover Placeholder -->
-    <div class="md:col-span-5 lg:col-span-4">
+  <div class="md:col-span-5 lg:col-span-4">
+    <% if @book.images.attached? %>
+      <div class="aspect-[3/4] relative rounded-r-2xl shadow-2xl shadow-stone-900/20 overflow-hidden border-l-8 border-stone-800 group">
+        <%= image_tag @book.images.first, class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105", id: "main-display-image" %>
+        
+        <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/30 to-transparent"></div>
+        <div class="absolute inset-0 pointer-events-none rounded-r-2xl border-r border-y border-white/10"></div>
+      </div>
+  
+      <% if @book.images.count > 1 %>
+        <div class="flex gap-3 mt-6 overflow-x-auto pb-2 no-scrollbar">
+          <% @book.images.each_with_index do |image, index| %>
+            <div class="flex-shrink-0 cursor-pointer transition-all hover:ring-2 hover:ring-indigo-500 rounded-lg overflow-hidden border border-stone-200 shadow-sm"
+                 onclick="document.getElementById('main-display-image').src='<%= rails_blob_path(image) %>'">
+              <%= image_tag image.variant(resize_to_limit: [120, 160]), class: "h-20 w-16 object-cover" %>
+            </div>
+          <% end %>
+        </div>
+        <p class="text-[10px] text-stone-400 font-bold uppercase tracking-widest mt-2 text-center">Click thumbnails to preview</p>
+      <% end %>
+  
+    <% else %>
       <div class="aspect-[3/4] bg-indigo-900 rounded-r-2xl shadow-2xl shadow-indigo-900/20 flex flex-col justify-between p-8 text-white relative overflow-hidden border-l-8 border-indigo-950">
-        <!-- Abstract Decoration -->
         <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
         
         <div class="relative z-10">
-          <p class="text-indigo-300 text-xs font-bold uppercase tracking-[0.2em] mb-4">Original Edition</p>
+          <p class="text-indigo-300 text-xs font-bold uppercase tracking-[0.2em] mb-4">Digital Edition</p>
           <h2 class="text-3xl font-serif font-bold leading-tight"><%= @book.title %></h2>
         </div>
-
+  
         <div class="relative z-10">
           <div class="h-px bg-indigo-400/30 w-12 mb-4"></div>
           <p class="text-lg font-medium text-indigo-100 italic">by <%= @book.author %></p>
         </div>
-
-        <!-- Book Spine Effect -->
-        <div class="absolute left-0 top-0 bottom-0 w-4 bg-black/10"></div>
+  
+        <div class="absolute left-0 top-0 bottom-0 w-4 bg-black/20"></div>
       </div>
-
-      <!-- Quick Metadata Sidebar -->
-      <div class="mt-8 space-y-4 px-2">
-        <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
-          <span class="text-stone-400 font-medium">Published</span>
-          <span class="text-stone-900 font-bold"><%= @book.published_year %></span>
-        </div>
-        <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
-          <span class="text-stone-400 font-medium">ISBN-13</span>
-          <span class="text-stone-900 font-mono font-bold"><%= @book.isbn %></span>
-        </div>
-        <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
-          <span class="text-stone-400 font-medium">Format</span>
-          <span class="text-stone-900 font-bold">E-Book</span>
-        </div>
+    <% end %>
+  
+    <div class="mt-8 space-y-4 px-2">
+      <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
+        <span class="text-stone-400 font-medium">Published</span>
+        <span class="text-stone-900 font-bold"><%= @book.published_year %></span>
+      </div>
+      <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
+        <span class="text-stone-400 font-medium">ISBN-13</span>
+        <span class="text-stone-900 font-mono font-bold"><%= @book.isbn %></span>
+      </div>
+      <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
+        <span class="text-stone-400 font-medium">Format</span>
+        <span class="text-stone-900 font-bold">E-Book</span>
       </div>
     </div>
+  </div>
 
-    <!-- Right Column: Details and Purchase -->
     <div class="md:col-span-7 lg:col-span-8">
       <header class="mb-8">
         <h1 class="text-5xl font-serif font-bold text-stone-900 mb-4 leading-tight">
@@ -59,7 +75,6 @@
         </p>
       </header>
 
-      <!-- Pricing and Action Card -->
       <div class="bg-white border border-stone-200 rounded-3xl p-8 mb-10 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
           <p class="text-stone-400 text-xs font-bold uppercase tracking-widest mb-1">Price</p>
@@ -72,7 +87,6 @@
           <!-- Buy Now (Primary Action) -->
           <%= button_to "Buy Now", "#", class: "px-8 py-4 bg-stone-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-lg shadow-stone-900/20 text-center active:scale-95" %>
           
-          <!-- Add to Cart (Secondary Action) -->
           <%= button_to cart_items_path(book_id: @book.id), class: "px-8 py-4 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-2xl font-bold hover:bg-indigo-100 transition-all flex items-center justify-center gap-2 group" do %>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -82,7 +96,6 @@
         </div>
       </div>
 
-      <!-- Description Section -->
       <div class="prose prose-stone max-w-none">
         <h3 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">About this book</h3>
         <div class="text-lg leading-relaxed text-stone-700 whitespace-pre-wrap">
@@ -90,42 +103,6 @@
         </div>
       </div>
 
-      <!-- Features/Trust Badges -->
-      <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-stone-200">
-        <div class="flex items-start gap-3">
-          <div class="text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <div>
-            <h4 class="text-sm font-bold text-stone-900">Instant Access</h4>
-            <p class="text-xs text-stone-500 mt-1">Download and read immediately after purchase.</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <div class="text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <div>
-            <h4 class="text-sm font-bold text-stone-900">Secure Payment</h4>
-            <p class="text-xs text-stone-500 mt-1">Your transaction is encrypted and protected.</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <div class="text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div>
-            <h4 class="text-sm font-bold text-stone-900">DRM-Free</h4>
-            <p class="text-xs text-stone-500 mt-1">Own the file forever on all your devices.</p>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

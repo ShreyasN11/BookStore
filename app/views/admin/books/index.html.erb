@@ -1,0 +1,37 @@
+<div class="max-w-6xl mx-auto px-4 py-12">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-serif font-medium text-stone-900">Manage Catalog</h1>
+    <%= link_to "Add New Book", new_admin_book_path, class: "bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-indigo-700 transition" %>
+  </div>
+
+  <div class="bg-white border border-stone-200 rounded-3xl shadow-sm overflow-hidden">
+    <table class="w-full text-left">
+      <thead class="bg-stone-50 border-b border-stone-100">
+        <tr>
+          <th class="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-widest">Book</th>
+          <th class="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-widest">Images</th>
+          <th class="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-widest">Price</th>
+          <th class="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-widest text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-stone-100">
+        <% @books.each do |book| %>
+          <tr>
+            <td class="px-6 py-4">
+              <p class="font-bold text-stone-900"><%= book.title %></p>
+              <p class="text-xs text-stone-500 italic"><%= book.author %></p>
+            </td>
+            <td class="px-6 py-4 text-stone-500 text-sm">
+              <%= book.images.count %> files
+            </td>
+            <td class="px-6 py-4 font-medium text-stone-900">Rs. <%= book.price %></td>
+            <td class="px-6 py-4 text-right space-x-3">
+              <%= link_to "Edit", edit_admin_book_path(book), class: "text-indigo-600 hover:underline text-sm font-bold" %>
+              <%= link_to "Delete", admin_book_path(book), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:text-red-600 text-sm font-bold" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

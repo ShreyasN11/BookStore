@@ -1,10 +1,9 @@
-# app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
   before_action :authenticate_user!
 
   def create
     @cart = current_user.cart
-    
+
     if @cart.cart_items.empty?
       redirect_to cart_path, alert: "Your cart is empty."
       return
@@ -12,7 +11,7 @@ class OrdersController < ApplicationController
 
     ActiveRecord::Base.transaction do
       @order = current_user.orders.create!(
-        total_price: @cart.total_price, 
+        total_price: @cart.total_price,
         status: :pending
       )
 
@@ -20,7 +19,7 @@ class OrdersController < ApplicationController
         @order.order_items.create!(
           book_id: item.book_id,
           quantity: item.quantity,
-          price: item.book.price 
+          price: item.book.price
         )
       end
 
