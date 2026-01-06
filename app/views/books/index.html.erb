@@ -5,7 +5,6 @@
     <p class="text-stone-500 text-lg">Browse our curated collection of digital literature.</p>
   </header>
 
-  <!-- AJAX Search Section -->
   <div class="max-w-2xl mx-auto mb-12">
     <%= form_with url: books_path, method: :get, 
                   data: { 
@@ -28,7 +27,6 @@
     <% end %>
   </div>
 
-  <!-- The Turbo Frame: Only this content updates -->
   <%= turbo_frame_tag "books_list" do %>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <% if @books.any? %>
