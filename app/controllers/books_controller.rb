@@ -1,6 +1,15 @@
 class BooksController < ApplicationController
     def index
-        @books = Book.all
+        if params[:query].present?
+          @books = Book.where("title ILIKE ? OR author ILIKE ?", "%#{params[:query]}%", "%#{params[:query]}%")
+        else
+          @books = Book.all
+        end
+      
+        respond_to do |format|
+          format.html 
+          format.turbo_stream 
+        end
     end
 
     def show

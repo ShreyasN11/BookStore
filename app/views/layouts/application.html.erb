@@ -43,13 +43,11 @@
           <div class="flex items-center space-x-6">
             <% if user_signed_in? %>
               <!-- Cart Link -->
-              <%= link_to "#", class: "flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-indigo-600 transition" do %>
+              <%= link_to cart_path, class: "flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-indigo-600 transition" do %>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 <span>Cart</span>
-                <!-- Optional: Cart Count Badge -->
-                <span class="bg-stone-100 text-stone-600 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-stone-200">0</span>
               <% end %>
     
               <!-- Profile Link -->

@@ -6,7 +6,12 @@ class User < ApplicationRecord
 
 
   has_many :orders
-  has_one :cart
+  has_one :cart, dependent: :destroy
+  after_create :create_user_cart
+
+  def create_user_cart
+    create_cart
+  end
 
   after_initialize do
     self.role ||= "customer" if new_record?

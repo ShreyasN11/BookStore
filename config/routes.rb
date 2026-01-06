@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   resources :books, only: [ :index, :show ]
   resources :users, only: [ :show, :edit, :update ]
-  resources :orders, only: [ :show ]
+  resources :orders, only: [ :show, :create ]
+  resources :cart_items, only: [ :create, :update, :destroy ]
+  resource :cart, only: [ :show ]
 
   root "books#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
