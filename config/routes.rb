@@ -3,9 +3,12 @@ Rails.application.routes.draw do
 
   resources :books, only: [ :index, :show ]
   resources :users, only: [ :show, :edit, :update ]
-  resources :orders, only: [ :show, :create ]
+  resources :orders, only: [ :show, :create ] do
+    post "buy_now", on: :collection
+  end
   resources :cart_items, only: [ :create, :update, :destroy ]
   resource :cart, only: [ :show ]
+
 
   namespace :admin do
     resources :books

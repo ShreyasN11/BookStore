@@ -3,11 +3,14 @@ class Scraper
 
     def call
       response = Faraday.get(BASE_URL, {
-        q: "India"
+        q: "Mumbai"
       })
 
       data = JSON.parse(response.body)
       save_books(data["docs"].take(10))
+      Rails.logger.info "[Scraper] Finished successfully"
+    rescue => e
+      Rails.logger.error "[Scraper] Failed: #{e.message}"
     end
 
     private
@@ -16,7 +19,6 @@ class Scraper
       books.each do |b|
         next if b["title"].blank?
 
-        # Use cover_edition_key as unique identifier
         external_id = b["cover_edition_key"] || b["key"]
 
         next if external_id.blank?

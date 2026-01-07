@@ -31,11 +31,30 @@ class UsersController < ApplicationController
 
   private
 
+  # def generate_csv(orders)
+  #   CSV.generate(headers: true) do |csv|
+  #     csv << [ "Order ID", "Status", "Date", "Total Price" ]
+  #     orders.each do |order|
+  #       csv << [ order.id, order.status, order.created_at, order.total_price ]
+  #     end
+  #   end
+  # end
+
   def generate_csv(orders)
     CSV.generate(headers: true) do |csv|
-      csv << [ "Order ID", "Status", "Date", "Total Price" ]
+      csv << [ "Order ID", "Book Title", "Author", "Quantity", "Price", "Date" ]
+  
       orders.each do |order|
-        csv << [ order.id, order.status, order.created_at, order.total_price ]
+        order.order_items.each do |item|
+          csv << [
+            order.id,
+            item.book.title,   
+            item.book.author,  
+            item.quantity,
+            item.price,        
+            order.created_at.strftime("%Y-%m-%d %H:%M")
+          ]
+        end
       end
     end
   end
@@ -49,7 +68,7 @@ class UsersController < ApplicationController
   end
 
   def authorize_user!
-    unless current_user.id == @user.id
+    unless current_user.id == @user.id || current_user.admin?
       redirect_to root_path, alert: "You are not authorized to view this profile."
     end
   end
