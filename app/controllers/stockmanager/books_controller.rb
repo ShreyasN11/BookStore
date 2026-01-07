@@ -1,5 +1,4 @@
-# app/controllers/admin/books_controller.rb
-class Admin::BooksController < AdminController
+class Stockmanager::BooksController < StockmanagerController
     def index
       @books = Book.all.order(created_at: :desc)
     end
@@ -11,7 +10,7 @@ class Admin::BooksController < AdminController
     def create
       @book = Book.new(book_params)
       if @book.save
-        redirect_to admin_books_path, notice: "Book created successfully."
+        redirect_to stockmanager_books_path, notice: "Book created successfully."
       else
         render :new, status: :unprocessable_entity
       end
@@ -24,7 +23,7 @@ class Admin::BooksController < AdminController
     def update
       @book = Book.find(params[:id])
       if @book.update(book_params)
-        redirect_to admin_books_path, notice: "Book updated successfully."
+        redirect_to stockmanager_books_path, notice: "Book updated successfully."
       else
         render :edit, status: :unprocessable_entity
       end
@@ -33,12 +32,12 @@ class Admin::BooksController < AdminController
     def destroy
       @book = Book.find(params[:id])
       @book.destroy
-      redirect_to admin_books_path, notice: "Book deleted."
+      redirect_to stockmanager_books_path, notice: "Book deleted."
     end
 
     private
 
     def book_params
-      params.require(:book).permit(:title, :author, :description, :price, :isbn, :published_year, images: [])
+      params.require(:book).permit(:title, :author, :description, :price, :isbn, :published_year, :quantity, images: [])
     end
 end

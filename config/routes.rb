@@ -10,9 +10,20 @@ Rails.application.routes.draw do
   resource :cart, only: [ :show ]
 
 
-  namespace :admin do
+  namespace :stockmanager do
     resources :books
     root to: "books#index"
+  end
+
+  namespace :superadmin do
+    resources :dashboard
+    root to: "dashboard#index"
+    patch "update_role/:id", to: "dashboard#update_role", as: :update_role
+  end
+
+  namespace :admin do
+    resources :users
+    root to: "users#index"
   end
 
   root "books#index"

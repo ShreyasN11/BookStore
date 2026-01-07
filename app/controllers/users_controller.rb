@@ -4,9 +4,6 @@ class UsersController < ApplicationController
   before_action :set_user, only: [ :show, :edit, :update ]
   before_action :authorize_user!, only: [ :show, :edit, :update ]
 
-  def index
-    @users = User.all
-  end
 
   def show
     @user = User.find(params[:id])
@@ -43,15 +40,15 @@ class UsersController < ApplicationController
   def generate_csv(orders)
     CSV.generate(headers: true) do |csv|
       csv << [ "Order ID", "Book Title", "Author", "Quantity", "Price", "Date" ]
-  
+
       orders.each do |order|
         order.order_items.each do |item|
           csv << [
             order.id,
-            item.book.title,   
-            item.book.author,  
+            item.book.title,
+            item.book.author,
             item.quantity,
-            item.price,        
+            item.price,
             order.created_at.strftime("%Y-%m-%d %H:%M")
           ]
         end
@@ -63,12 +60,22 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  # def super_admin
+  #   @user = User.find(params[:id])
+  #   if @user.role != "superadmin"
+  #     return false
+  #   else 
+  #     return true
+  #   end
+  # end  
+
   def user_params
     params.require(:user).permit(:email, :name)
   end
 
+
   def authorize_user!
-    unless current_user.id == @user.id || current_user.admin?
+    unless current_user.id == @user.id || current_user.admin? || current_user.superadmin?
       redirect_to root_path, alert: "You are not authorized to view this profile."
     end
   end

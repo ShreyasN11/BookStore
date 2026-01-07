@@ -1,0 +1,96 @@
+<div class="max-w-7xl mx-auto px-4 py-12 ">
+  <header class="mb-12">
+    <h1 class="text-4xl font-serif font-medium text-stone-900">Super Admin Overview & User Management</h1>
+  </header>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
+      <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2">Active Users</p>
+      <p class="text-3xl font-bold text-stone-900"><%= @total_users %></p>
+    </div>
+    <div class="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
+      <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2">Total Orders</p>
+      <p class="text-3xl font-bold text-stone-900"><%= @total_orders %></p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- User Management (Wide Column) -->
+    <div class="lg:col-span-2 space-y-6">
+      <section class="bg-white border border-stone-200 rounded-[2rem] shadow-sm overflow-hidden">
+        <div class="px-8 py-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/30">
+          <h2 class="font-serif text-xl text-stone-900">User Management</h2>
+          <span class="text-xs text-stone-400 font-medium">Assign access levels</span>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-stone-50/50">
+                <th class="px-8 py-4 text-[10px] font-bold text-stone-400 uppercase tracking-widest">User</th>
+                <th class="px-8 py-4 text-[10px] font-bold text-stone-400 uppercase tracking-widest">Current Role</th>
+                <th class="px-8 py-4 text-[10px] font-bold text-stone-400 uppercase tracking-widest text-right">Assign New Role</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100">
+              <% @users.each do |user| %>
+                <tr class="hover:bg-stone-50/30 transition-colors">
+                  <td class="px-8 py-5">
+                    <p class="font-bold text-stone-900 text-sm"><%= user.email %></p>
+                    <p class="text-[10px] text-stone-400 italic">Joined <%= user.created_at.strftime("%b %Y") %></p>
+                  </td>
+                  <td class="px-8 py-5">
+                    <% role_color = user.superadmin? ? 'text-indigo-600 bg-indigo-50 border-indigo-100' : (user.admin? ? 'text-amber-600 bg-amber-50 border-amber-100' : 'text-stone-500 bg-stone-50 border-stone-100') %>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase border <%= role_color %>">
+                      <%= user.role %>
+                    </span>
+                  </td>
+                  <td class="px-8 py-5 text-right">
+                    <% if user != current_user %>
+                      <div class="flex justify-end gap-2">
+                        <% User.roles.keys.each do |role_name| %>
+                          <% unless user.role == role_name %>
+                            <%= button_to role_name.titleize, superadmin_update_role_path(user, role: role_name), 
+                                method: :patch, 
+                                class: "text-[10px] font-bold px-3 py-1 rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-900 hover:text-white transition cursor-pointer" %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    <% else %>
+                      <span class="text-[10px] text-stone-300 italic font-bold uppercase">Self (Protected)</span>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Quick View Sidebar (Books & Orders) -->
+    <div class="lg:col-span-1 space-y-8">
+      
+      <!-- Recent Orders -->
+      <section class="bg-white border border-stone-200 rounded-[2rem] p-8 shadow-sm">
+        <h2 class="font-serif text-xl text-stone-900 mb-6">Recent Activity</h2>
+        <div class="space-y-6">
+          <% @orders.each do |order| %>
+            <div class="flex justify-between items-center border-b border-stone-50 pb-4">
+              <div>
+                <p class="text-sm font-bold text-stone-900">#<%= order.id %></p>
+                <p class="text-xs text-stone-500"><%= order.user.email %></p>
+              </div>
+              <p class="text-sm font-bold text-indigo-600">Rs. <%= number_with_precision(order.total_price, precision: 2) %></p>
+            </div>
+          <% end %>
+        </div>
+        <%= link_to "Manage All Books", stockmanager_books_path, class: "block text-center mt-8 text-xs font-bold text-stone-400 uppercase tracking-widest hover:text-indigo-600 transition" %>
+      </section>
+
+
+    </div>
+  </div>
+</div>
