@@ -12,9 +12,9 @@ class Superadmin::DashboardController < SuperadminController
             format.pdf do
               render pdf: "Report_#{Date.today}",
                      template: "superadmin/index",
-                     layout: "pdf", 
+                     layout: "pdf",
                      disposition: "attachment",
-                     print_media_type: true 
+                     print_media_type: true
             end
         end
     end

@@ -4,7 +4,7 @@
 
 3. File Upload, make sure each book can have multiple images uploaded to it via admin panel(login) - Done
 
-4. Scrape book data from API ( for now make the worker/background job that scrapes the 1 page a day) and save to DB [https://openlibrary.org/dev/docs/api/mybooks] - Scraping done, worker/background scheduling pending
+4. Scrape book data from API ( for now make the worker/background job that scrapes the 1 page a day) and save to DB [https://openlibrary.org/dev/docs/api/mybooks] - Done
 
 5. Create customer profile, sign in and sign up (different login) - Done
 
@@ -16,7 +16,7 @@
 
 9. SuperAdmin, StockManager and Admin - SuperAdmin, StockManager, Admin Working
 
-10. PDF printing in admin/superadmin - 
+10. PDF printing in admin/superadmin - Done
 
 11. Sidekiq-cron - Done
 
