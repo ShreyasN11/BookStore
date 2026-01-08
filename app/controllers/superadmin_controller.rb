@@ -9,5 +9,4 @@ class SuperadminController < ApplicationController
       redirect_to root_path, alert: "Access denied. Restricted to Super Admins."
     end
   end
-
-end    
+end

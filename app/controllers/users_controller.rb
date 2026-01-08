@@ -60,15 +60,6 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  # def super_admin
-  #   @user = User.find(params[:id])
-  #   if @user.role != "superadmin"
-  #     return false
-  #   else 
-  #     return true
-  #   end
-  # end  
-
   def user_params
     params.require(:user).permit(:email, :name)
   end

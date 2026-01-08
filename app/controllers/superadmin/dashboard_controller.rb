@@ -7,7 +7,7 @@ class Superadmin::DashboardController < SuperadminController
         @books = Book.all.order(created_at: :desc).limit(10)
         @orders = Order.includes(:user).all.order(created_at: :desc).limit(10)
     end
-  
+
     def update_role
         @user = User.find(params[:id])
         if @user.update(role: params[:role])
