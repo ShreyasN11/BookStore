@@ -77,3 +77,5 @@ gem "sidekiq"
 gem "sidekiq-cron"
 
 gem "csv"
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'

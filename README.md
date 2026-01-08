@@ -12,11 +12,11 @@
 
 7. Create a CSV download option for the customer in profile, for all the orders he made(book, author, price, description) - CSV Download Working
 
-8. Write tests (rspec).
+8. Write tests (rspec) - Done
 
 9. SuperAdmin, StockManager and Admin - SuperAdmin, StockManager, Admin Working
 
-10. PDF printing in admin/superadmin
+10. PDF printing in admin/superadmin - 
 
 11. Sidekiq-cron - Done
 
