@@ -1,10 +1,10 @@
-puts "Creating Admin User..."
 
-admin = User.find_or_create_by!(email: "superadmin@ebookstore.com") do |user|
-  user.name = "Super Admin"
+admin = User.find_or_create_by!(email: "trial@ebookstore.com") do |user|
+  user.name = "trial user"
+  user.username = "trialuser"
   user.password = "password123"
   user.password_confirmation = "password123"
-  user.role = :superadmin
+  user.role = :customer
 end
 
-puts "Successfully created superadmin:"
+puts "Successfully created new user"

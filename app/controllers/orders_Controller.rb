@@ -24,10 +24,10 @@ class OrdersController < ApplicationController
       end
 
       @cart.cart_items.destroy_all
-      UserMailer.order_receipt(@order).deliver_later 
+      UserMailer.order_receipt(@order).deliver_later
     end
 
- 
+
     redirect_to order_path(@order), notice: "Your order has been placed successfully!"
     rescue ActiveRecord::RecordInvalid
       redirect_to cart_path, alert: "There was an error processing your order."
