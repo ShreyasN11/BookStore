@@ -2,5 +2,5 @@
   :schedule:
     scrape_books_twice_daily:
       cron: "0 0,12 * * *"
-      class: "ScrapeBooksJob"
+      class: "ScrapeJob"
       description: "Scrapes 10 ruby books from OpenLibrary every day"

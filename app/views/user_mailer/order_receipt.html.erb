@@ -1,0 +1,17 @@
+<div style="font-family: sans-serif; color: #1c1917;">
+  <h2 style="color: #4f46e5;">Thank you for your purchase!</h2>
+  <p>Hello <%= @user.name.presence || @user.email %>,</p>
+  <p>Your order <strong> <%= @order.id %></strong> has been processed successfully.</p>
+  
+  <p>We have attached your PDF receipt to this email for your records.</p>
+  
+  <div style="margin: 25px 0; padding: 20px; border: 1px solid #e7e5e4; border-radius: 12px;">
+    <h3 style="margin-top: 0;">Order Summary</h3>
+    <p>Total Paid: <strong>Rs. <%= number_with_precision(@order.total_price, precision: 2) %></strong></p>
+    <p>Status: <%= @order.status.capitalize %></p>
+  </div>
+
+  <p>You can also view your full order history in your <%= link_to 'customer profile', user_url(@user) %>.</p>
+  
+  <p>Happy Reading,<br>The EBookStore Team</p>
+</div>
