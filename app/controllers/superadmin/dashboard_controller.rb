@@ -7,6 +7,19 @@ class Superadmin::DashboardController < SuperadminController
         @books = Book.all.order(created_at: :desc).limit(10)
         @orders = Order.includes(:user).all.order(created_at: :desc).limit(10)
 
+        @sales_by_genre = OrderItem.joins(:book)
+        .group("books.genre")
+        .sum("order_items.price * order_items.quantity")
+
+        @sales_per_month = Order.group_by_month(:created_at, last: 12).sum(:total_price)
+
+
+        user_counts = User.group_by_week(:created_at, last: 30).count
+        sum = 0
+        @user_growth = user_counts.map { |date, count| [ date, sum += count ] }.to_h
+
+        @stock_distribution = Book.group(:genre).count
+
         respond_to do |format|
             format.html
             format.pdf do

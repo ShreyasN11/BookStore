@@ -1,0 +1,2 @@
+class ScraperState < ApplicationRecord
+end

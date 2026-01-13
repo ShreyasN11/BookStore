@@ -38,12 +38,14 @@
                 <%= book.title %>
               </h2>
               <p class="text-stone-500 font-medium italic">by <%= book.author %></p>
+              <p class="text-stone-500 font-medium italic">Genre:  <%= book.genre %></p>
             </div>
             
             <div class="mt-8 flex items-center justify-between border-t border-stone-50 pt-4">
               <span class="text-2xl font-semibold text-stone-900">
                   Rs. <%= number_with_precision(book.price, precision: 2) %>
               </span>
+              
               
               <%= link_to "View Details →", book_path(book), data: { turbo: false }, class: "text-indigo-600 font-semibold text-sm hover:text-indigo-800 transition" %>
             </div>

@@ -38,6 +38,6 @@ class Stockmanager::BooksController < StockmanagerController
     private
 
     def book_params
-      params.require(:book).permit(:title, :author, :description, :price, :isbn, :published_year, :quantity, images: [])
+      params.require(:book).permit(:title, :author, :description, :price, :isbn, :published_year, :quantity, :genre, images: [])
     end
 end

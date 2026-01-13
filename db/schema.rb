@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_09_091215) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_13_081354) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,12 +46,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_09_091215) do
     t.string "author"
     t.datetime "created_at", null: false
     t.text "description"
+    t.string "genre"
     t.string "isbn"
     t.decimal "price"
     t.integer "published_year"
     t.integer "quantity", default: 1, null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
+    t.index ["isbn"], name: "index_books_on_isbn", unique: true
     t.check_constraint "quantity >= 0", name: "quantity_must_be_positive"
   end
 
@@ -90,6 +92,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_09_091215) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "scraper_states", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "last_page"
+    t.string "name"
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

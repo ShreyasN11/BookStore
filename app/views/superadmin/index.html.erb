@@ -22,6 +22,74 @@
     </div>
   </div>
 
+  <div class="mb-12 space-y-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <div class="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
+        <h3 class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-6">Monthly Revenue (Rs.)</h3>
+        <%= line_chart @sales_per_month, 
+              prefix: "Rs. ", 
+              colors: ["#4f46e5"], 
+              curve: true,
+              library: { 
+                scales: { 
+                  y: { grid: { display: false }, ticks: { font: { family: 'sans-serif' } } },
+                  x: { grid: { display: false }, ticks: { font: { family: 'sans-serif' } } }
+                } 
+              } %>
+      </div>
+
+      <div class="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
+        <h3 class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-6">Cumulative User Growth</h3>
+        <%= area_chart @user_growth, 
+              colors: ["#1c1917"], 
+              library: { 
+                fill: { target: 'origin', above: 'rgba(28, 25, 23, 0.05)' },
+                scales: { 
+                  y: { grid: { display: false }, ticks: { font: { family: 'sans-serif' } } },
+                  x: { grid: { display: false }, ticks: { font: { family: 'sans-serif' } } }
+                } 
+              } %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
+        <div class="flex flex-col items-center mb-8">
+          <h3 class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2">Catalog Diversity</h3>
+          <p class="text-xl font-serif text-stone-900">Unique Titles by Genre</p>
+        </div>
+        <div class="max-w-md mx-auto">
+          <%= pie_chart @stock_distribution, 
+                donut: true, 
+                library: { 
+                  cutout: '75%',
+                  plugins: { 
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'serif' } } } 
+                  } 
+                } %>
+        </div>
+      </div>
+
+      <div class="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
+        <div class="flex flex-col items-center mb-8">
+          <h3 class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2">Sales Distribution</h3>
+          <p class="text-xl font-serif text-stone-900">Sales by Genre</p>
+        </div>
+        <div class="max-w-md mx-auto">
+          <%= pie_chart @sales_by_genre, 
+                donut: true, 
+                library: { 
+                  cutout: '75%',
+                  plugins: { 
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'serif' } } } 
+                  } 
+                } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     
     <!-- User Management (Wide Column) -->
