@@ -5,7 +5,7 @@ class AdminController < ApplicationController
     private
 
     def authorize_admin!
-      unless current_user.admin? || current_user.superadmin?
+      unless true_user&.admin? || true_user&.superadmin?
         redirect_to root_path, alert: "Access denied. Admins only."
       end
     end

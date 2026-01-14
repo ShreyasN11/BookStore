@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users
     root to: "users#index"
+    resources :impersonations, only: [ :create ] do
+      delete :destroy, on: :collection, as: :stop
+    end
   end
 
   root "books#index"

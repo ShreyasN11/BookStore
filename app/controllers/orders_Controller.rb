@@ -12,7 +12,8 @@ class OrdersController < ApplicationController
     ActiveRecord::Base.transaction do
       @order = current_user.orders.create!(
         total_price: @cart.total_price,
-        status: :pending
+        status: :pending,
+        admin_overridden: impersonating? ? true : false
       )
 
       @cart.cart_items.each do |item|

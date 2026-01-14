@@ -2,6 +2,7 @@ class Admin::UsersController < AdminController
     before_action :set_user, only: [ :show, :edit, :update, :destroy ]
     before_action :authorize_admin_actions!, only: [ :edit, :update, :destroy ]
 
+
     def index
       @users = User.all
     end
