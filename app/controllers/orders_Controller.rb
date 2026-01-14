@@ -42,12 +42,11 @@ class OrdersController < ApplicationController
   end
 
   def buy_now
-
     if @book.quantity < 1
       redirect_to book_path(@book), alert: "This book is out of stock."
       return
     end
-    
+
     @book = Book.find(params[:book_id])
     ActiveRecord::Base.transaction do
       @order = current_user.orders.create!(
