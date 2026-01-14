@@ -17,6 +17,13 @@ class OrdersController < ApplicationController
       )
 
       @cart.cart_items.each do |item|
+        book = item.book
+        if book.quantity < item.quantity
+          raise ActiveRecord::RecordInvalid.new(book)
+        end
+
+        book.update!(quantity: book.quantity - item.quantity)
+
         @order.order_items.create!(
           book_id: item.book_id,
           quantity: item.quantity,
@@ -35,6 +42,12 @@ class OrdersController < ApplicationController
   end
 
   def buy_now
+
+    if @book.quantity < 1
+      redirect_to book_path(@book), alert: "This book is out of stock."
+      return
+    end
+    
     @book = Book.find(params[:book_id])
     ActiveRecord::Base.transaction do
       @order = current_user.orders.create!(
