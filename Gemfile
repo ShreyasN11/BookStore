@@ -82,3 +82,5 @@ gem "wkhtmltopdf-binary"
 gem "stripe"
 gem "chartkick"
 gem "groupdate"
+
+gem "foreman"
