@@ -42,27 +42,38 @@ class OrdersController < ApplicationController
   end
 
   def buy_now
-    if @book.quantity < 1
-      redirect_to book_path(@book), alert: "This book is out of stock."
+    @book = Book.find(params[:book_id])
+
+    if @book.quantity.to_i < 1
+      redirect_to book_path(@book), alert: "This book is out of stock.", status: :see_other
       return
     end
 
-    @book = Book.find(params[:book_id])
     ActiveRecord::Base.transaction do
       @order = current_user.orders.create!(
         total_price: @book.price,
-        status: :pending
+        status: :pending,
+        admin_overridden: impersonating? ? true : false
       )
+
+      @book.update!(quantity: @book.quantity - 1)
+
       @order.order_items.create!(
         book_id: @book.id,
         quantity: 1,
         price: @book.price
       )
+
+      UserMailer.order_receipt(@order).deliver_later
     end
-    redirect_to order_path(@order), notice: "Thank you for your purchase! Your book is ready."
-    rescue ActiveRecord::RecordInvalid
-      redirect_to book_path(@book), alert: "We couldn't process your purchase. Please try again."
-    end
+
+    redirect_to order_path(@order), notice: "Thank you for your purchase!", status: :see_other
+
+  rescue ActiveRecord::RecordNotFound
+    redirect_to books_path, alert: "Book not found.", status: :see_other
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to book_path(@book), alert: "We couldn't process your purchase: #{e.message}", status: :see_other
+  end
 
 
   def show

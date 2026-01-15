@@ -1,62 +1,64 @@
-<div class="max-w-4xl mx-auto px-4 py-6 font-serif">
+<div class="max-w-4xl mx-auto px-4 py-6 font-serif" data-controller="modal">
   
   <header class="text-center mb-12">
     <h1 class="text-5xl font-serif font-medium text-stone-900 mb-4 tracking-tight">Discover your next read</h1>
-    <p class="text-stone-500 text-lg">Browse our curated collection of digital literature.</p>
   </header>
 
   <div class="max-w-2xl mx-auto mb-12">
     <%= form_with url: books_path, method: :get, 
-                  data: { 
-                    controller: "search", 
-                    turbo_frame: "books_list", 
-                    turbo_action: "advance" 
-                  } do |f| %>
+                  data: { controller: "search", turbo_frame: "books_list" } do |f| %>
       <div class="relative flex items-center">
-        <%= f.text_field :query, 
-            placeholder: "Search by title or author...", 
-            value: params[:query], 
-            data: { action: "input->search#submit" },
-            class: "w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none text-stone-800" %>
-        <div class="absolute left-4 text-stone-400">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
+        <%= f.text_field :query, placeholder: "Search...", data: { action: "input->search#submit" },
+            class: "w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-2xl shadow-sm outline-none" %>
       </div>
     <% end %>
   </div>
 
   <%= turbo_frame_tag "books_list" do %>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <% if @books.any? %>
-        <% @books.each do |book| %>
-          <article class="group bg-white p-6 rounded-2xl border border-stone-200 hover:border-indigo-300 hover:shadow-xl hover:shadow-indigo-900/5 transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div class="inline-block px-2 py-1 bg-stone-100 text-stone-500 text-[10px] uppercase tracking-widest font-bold rounded mb-4">E-Book</div>
-              <h2 class="text-xl font-bold text-stone-900 group-hover:text-indigo-600 transition-colors mb-1">
-                <%= book.title %>
-              </h2>
-              <p class="text-stone-500 font-medium italic">by <%= book.author %></p>
-              <p class="text-stone-500 font-medium italic">Genre:  <%= book.genre %></p>
-            </div>
-            
-            <div class="mt-8 flex items-center justify-between border-t border-stone-50 pt-4">
-              <span class="text-2xl font-semibold text-stone-900">
-                  Rs. <%= number_with_precision(book.price, precision: 2) %>
-              </span>
-              
-              
-              <%= link_to "View Details →", book_path(book), data: { turbo: false }, class: "text-indigo-600 font-semibold text-sm hover:text-indigo-800 transition" %>
-            </div>
-          </article>
-        <% end %>
-      <% else %>
-        <div class="col-span-full text-center py-20 bg-stone-100/50 rounded-3xl border-2 border-dashed border-stone-200">
-          <p class="text-stone-400 font-medium">No books found matching "<%= params[:query] %>"</p>
-          <%= link_to "Clear search", books_path, class: "text-indigo-600 font-semibold mt-2 inline-block hover:underline" %>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="books-collection">
+      <% @books.each do |book| %>
+        <article class="group bg-white p-6 rounded-2xl border border-stone-200 hover:shadow-lg transition-all" 
+                 data-modal-target="card" 
+                 data-book-id="<%= book.id %>">
+          <div>
+            <h2 class="text-xl font-bold text-stone-900"><%= book.title %></h2>
+            <p class="text-stone-500 italic">by <%= book.author %></p>
+          </div>
+          
+          <div class="mt-4 pt-4 border-t border-stone-50 flex justify-end">
+            <button type="button" 
+                    data-action="click->modal#open" 
+                    data-book-id="<%= book.id %>"
+                    class="text-indigo-600 font-semibold text-sm hover:underline cursor-pointer">
+              View Details →
+            </button>
+          </div>
+        </article>
       <% end %>
     </div>
   <% end %>
+
+<div data-modal-target="overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-stone-900/80 backdrop-blur-md p-4">
+
+  <button data-action="click->modal#previous" class="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-50 bg-white/10 hover:bg-white text-white hover:text-stone-900 p-4 rounded-full transition-all duration-300 border border-white/20 active:scale-90 cursor-pointer group">
+     <
+  </button>
+
+  <div class="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+    <div class="p-8 min-h-[250px]">
+      <button data-action="click->modal#close" class="absolute top-5 right-5 text-stone-300 hover:text-stone-900 text-3xl font-light cursor-pointer transition-colors leading-none">&times;</button>
+      
+      <%= turbo_frame_tag "modal_book_content" do %>
+        <div class="flex flex-col items-center justify-center py-16 gap-3">
+          <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Opening Library...</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <button data-action="click->modal#next" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-50 bg-white/10 hover:bg-white text-white hover:text-stone-900 p-4 rounded-full transition-all duration-300 border border-white/20 active:scale-90 cursor-pointer group">
+     >
+  </button>
+
+</div>
 </div>

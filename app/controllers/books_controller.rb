@@ -5,11 +5,6 @@ class BooksController < ApplicationController
         else
           @books = Book.all
         end
-
-        respond_to do |format|
-          format.html
-          format.turbo_stream
-        end
     end
 
     def show

@@ -1,114 +1,125 @@
-<div class="max-w-6xl mx-auto px-4 py-12">
-  <nav class="mb-8">
-    <%= link_to books_path, class: "text-stone-400 hover:text-stone-600 text-sm font-medium inline-flex items-center gap-2 transition" do %>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-      </svg>
-      Back to Bookstore
-    <% end %>
-  </nav>
-
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-    
-  <div class="md:col-span-5 lg:col-span-4">
-    <% if @book.images.attached? %>
-      <div class="aspect-[3/4] relative rounded-r-2xl shadow-2xl shadow-stone-900/20 overflow-hidden border-l-8 border-stone-800 group">
-        <%= image_tag @book.images.first, class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105", id: "main-display-image" %>
-        
-        <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/30 to-transparent"></div>
-        <div class="absolute inset-0 pointer-events-none rounded-r-2xl border-r border-y border-white/10"></div>
+<% if turbo_frame_request? %>
+  <%= turbo_frame_tag "modal_book_content" do %>
+    <div class="flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+      <div class="flex-shrink-0 w-32 shadow-xl shadow-stone-200">
+        <% if @book.images.attached? %>
+          <%= image_tag @book.images.first, class: "rounded-lg border border-stone-100 w-full h-auto object-cover" %>
+        <% else %>
+          <div class="aspect-[3/4] bg-indigo-900 rounded-lg flex items-center justify-center text-white text-[10px] font-bold p-4">
+            <%= @book.title %>
+          </div>
+        <% end %>
       </div>
-  
-      <% if @book.images.count > 1 %>
-        <div class="flex gap-3 mt-6 overflow-x-auto pb-2 no-scrollbar">
-          <% @book.images.each_with_index do |image, index| %>
-            <div class="flex-shrink-0 cursor-pointer transition-all hover:ring-2 hover:ring-indigo-500 rounded-lg overflow-hidden border border-stone-200 shadow-sm"
-                 onclick="document.getElementById('main-display-image').src='<%= rails_blob_path(image) %>'">
-              <%= image_tag image.variant(resize_to_limit: [120, 160]), class: "h-20 w-16 object-cover" %>
-            </div>
-          <% end %>
+      <div class="flex-1 min-w-0">
+        <div class="mb-4">
+          <h2 class="text-xl font-serif font-bold text-stone-900 truncate"><%= @book.title %></h2>
+          <p class="text-sm text-stone-500 italic">by <%= @book.author %></p>
         </div>
-        <p class="text-[10px] text-stone-400 font-bold uppercase tracking-widest mt-2 text-center">Click thumbnails to preview</p>
-      <% end %>
-  
-    <% else %>
-      <div class="aspect-[3/4] bg-indigo-900 rounded-r-2xl shadow-2xl shadow-indigo-900/20 flex flex-col justify-between p-8 text-white relative overflow-hidden border-l-8 border-indigo-950">
-        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-        
-        <div class="relative z-10">
-          <p class="text-indigo-300 text-xs font-bold uppercase tracking-[0.2em] mb-4">Digital Edition</p>
-          <h2 class="text-3xl font-serif font-bold leading-tight"><%= @book.title %></h2>
+        <div class="flex flex-wrap gap-4 mb-6 justify-center md:justify-start">
+          <div class="flex flex-col">
+            <span class="text-[9px] font-bold text-stone-400 uppercase tracking-widest">Genre</span>
+            <span class="text-xs font-semibold text-stone-700"><%= @book.genre %></span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[9px] font-bold text-stone-400 uppercase tracking-widest">Price</span>
+            <span class="text-sm font-bold text-indigo-600">Rs. <%= number_with_precision(@book.price, precision: 2) %></span>
+          </div>
         </div>
-  
-        <div class="relative z-10">
-          <div class="h-px bg-indigo-400/30 w-12 mb-4"></div>
-          <p class="text-lg font-medium text-indigo-100 italic">by <%= @book.author %></p>
-        </div>
-  
-        <div class="absolute left-0 top-0 bottom-0 w-4 bg-black/20"></div>
-      </div>
-    <% end %>
-  
-    <div class="mt-8 space-y-4 px-2">
-      <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
-        <span class="text-stone-400 font-medium">Published</span>
-        <span class="text-stone-900 font-bold"><%= @book.published_year %></span>
-      </div>
-      <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
-        <span class="text-stone-400 font-medium">ISBN-13</span>
-        <span class="text-stone-900 font-mono font-bold"><%= @book.isbn %></span>
-      </div>
-      <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
-        <span class="text-stone-400 font-medium">Format</span>
-        <span class="text-stone-900 font-bold">E-Book</span>
-      </div>
-    </div>
-  </div>
-
-    <div class="md:col-span-7 lg:col-span-8">
-      <header class="mb-8">
-        <h1 class="text-5xl font-serif font-bold text-stone-900 mb-4 leading-tight">
-          <%= @book.title %>
-        </h1>
-        <p class="text-2xl text-stone-500 italic">
-          A novel by <span class="text-indigo-600 font-medium not-italic"><%= @book.author %></span>
-        </p>
-      </header>
-
-      <div class="bg-white border border-stone-200 rounded-3xl p-8 mb-10 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div>
-          <p class="text-stone-400 text-xs font-bold uppercase tracking-widest mb-1">Price</p>
-          <p class="text-4xl font-bold text-stone-900">
-            $<%= number_with_precision(@book.price, precision: 2) %>
-          </p>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <!-- Buy Now (Primary Action) -->
-          <%= button_to buy_now_orders_path, 
+        <div class="flex flex-wrap gap-2 justify-center md:justify-start pt-4 border-t border-stone-100">
+          <%= button_to buy_now_orders_path(book_id: @book.id), 
               method: :post, 
-              params: { book_id: @book.id }, 
-              data: { turbo_confirm: "Confirm purchase of #{@book.title} for Rs. #{number_with_precision(@book.price, precision: 2)}?" }, 
-              class: "px-8 py-4 bg-stone-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-lg shadow-stone-900/20 text-center active:scale-95 cursor-pointer" do %>
+              data: { turbo: false },
+              class: "px-4 py-2 bg-stone-900 text-white rounded-lg text-xs font-bold hover:bg-black transition-all cursor-pointer" do %>
             Buy Now
           <% end %>
           
-          <%= button_to cart_items_path(book_id: @book.id), class: "px-8 py-4 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-2xl font-bold hover:bg-indigo-100 transition-all flex items-center justify-center gap-2 group" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
+          <%= button_to cart_items_path(book_id: @book.id), 
+              data: { turbo: false },
+              class: "px-4 py-2 bg-stone-50 text-stone-600 border border-stone-200 rounded-lg text-xs font-bold hover:bg-stone-100 transition-all cursor-pointer" do %>
             Add to Cart
+          <% end %>
+
+          <%= link_to book_path(@book), 
+              data: { turbo: false }, 
+              class: "px-4 py-2 text-indigo-600 text-xs font-bold hover:underline" do %>
+            View Full Details →
           <% end %>
         </div>
       </div>
+    </div>
+  <% end %>
 
-      <div class="prose prose-stone max-w-none">
-        <h3 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">About this book</h3>
-        <div class="text-lg leading-relaxed text-stone-700 whitespace-pre-wrap">
-          <%= @book.description %>
+<% else %>
+
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <nav class="mb-8">
+      <%= link_to books_path, class: "text-stone-400 hover:text-stone-600 text-sm font-medium inline-flex items-center gap-2 transition" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Bookstore
+      <% end %>
+    </nav>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+      <div class="md:col-span-5 lg:col-span-4">
+        <% if @book.images.attached? %>
+          <div class="aspect-[3/4] relative rounded-r-2xl shadow-2xl shadow-stone-900/20 overflow-hidden border-l-8 border-stone-800 group">
+            <%= image_tag @book.images.first, class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105", id: "main-display-image" %>
+            <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/30 to-transparent"></div>
+            <div class="absolute inset-0 pointer-events-none rounded-r-2xl border-r border-y border-white/10"></div>
+          </div>
+          <% if @book.images.count > 1 %>
+            <div class="flex gap-3 mt-6 overflow-x-auto pb-2 no-scrollbar">
+              <% @book.images.each_with_index do |image, index| %>
+                <div class="flex-shrink-0 cursor-pointer transition-all hover:ring-2 hover:ring-indigo-500 rounded-lg overflow-hidden border border-stone-200 shadow-sm"
+                     onclick="document.getElementById('main-display-image').src='<%= rails_blob_path(image) %>'">
+                  <%= image_tag image, class: "h-20 w-16 object-cover" %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="aspect-[3/4] bg-indigo-900 rounded-r-2xl shadow-2xl flex flex-col justify-between p-8 text-white relative overflow-hidden border-l-8 border-indigo-950">
+            <h2 class="text-3xl font-serif font-bold"><%= @book.title %></h2>
+            <p class="text-lg italic">by <%= @book.author %></p>
+          </div>
+        <% end %>
+      
+        <div class="mt-8 space-y-4 px-2">
+          <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
+            <span class="text-stone-400 font-medium">Published</span>
+            <span class="text-stone-900 font-bold"><%= @book.published_year %></span>
+          </div>
+          <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
+            <span class="text-stone-400 font-medium">ISBN-13</span>
+            <span class="text-stone-900 font-mono font-bold"><%= @book.isbn %></span>
+          </div>
+          <div class="flex justify-between text-sm border-b border-stone-200 pb-2">
+            <span class="text-stone-400 font-medium">Genre</span>
+            <span class="text-stone-900 font-bold"><%= @book.genre %></span>
+          </div>
         </div>
       </div>
+      <div class="md:col-span-7 lg:col-span-8">
+        <header class="mb-8">
+          <h1 class="text-5xl font-serif font-bold text-stone-900 mb-4 leading-tight"><%= @book.title %></h1>
+          <p class="text-2xl text-stone-500 italic">A novel by <span class="text-indigo-600 font-medium not-italic"><%= @book.author %></span></p>
+        </header>
 
+        <div class="bg-white border border-stone-200 rounded-3xl p-8 mb-10 shadow-sm flex justify-between items-center">
+          <p class="text-4xl font-bold text-stone-900">Rs. <%= number_with_precision(@book.price, precision: 2) %></p>
+          <div class="flex gap-3">
+            <%= button_to "Buy Now", buy_now_orders_path(book_id: @book.id), method: :post, class: "px-8 py-4 bg-stone-900 text-white rounded-2xl font-bold hover:bg-black transition-all cursor-pointer" %>
+            <%= button_to "Add to Cart", cart_items_path(book_id: @book.id), class: "px-8 py-4 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-2xl font-bold hover:bg-indigo-100 transition-all" %>
+          </div>
+        </div>
+
+        <div class="prose prose-stone max-w-none">
+          <h3 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">About this book</h3>
+          <div class="text-lg leading-relaxed text-stone-700 whitespace-pre-wrap"><%= @book.description %></div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
