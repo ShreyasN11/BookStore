@@ -18,6 +18,8 @@ module Bookstore
 
     config.active_job.queue_adapter = :sidekiq
 
+    config.exceptions_app = self.routes
+
 
     # Configuration for the application, engines, and railties goes here.
     #

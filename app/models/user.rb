@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :orders
   has_one :cart, dependent: :destroy
   after_create :create_user_cart
+  has_one_attached :pfp
 
 
 def self.find_for_database_authentication(warden_conditions)
