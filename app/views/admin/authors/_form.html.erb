@@ -1,0 +1,36 @@
+<%= form_with(model: [:admin, author], class: "space-y-6") do |f| %>
+    <div>
+      <%= f.label :name, class: "block text-xs font-bold text-stone-400 uppercase mb-2" %>
+      <%= f.text_field :name, placeholder: "Author's full name", class: "w-full rounded-xl border-stone-200 focus:ring-indigo-500 focus:border-indigo-500 p-3" %>
+    </div>
+  
+    <div>
+      <%= f.label :bio, "Bio", class: "block text-xs font-bold text-stone-400 uppercase mb-2" %>
+      <%= f.text_area :bio, rows: 6, placeholder: "Write a short Bio...", class: "w-full rounded-xl border-stone-200 focus:ring-indigo-500 focus:border-indigo-500 p-3" %>
+    </div>
+  
+  
+    <div class="p-8 bg-stone-50 border-2 border-dashed border-stone-200 rounded-[2rem]">
+      <div class="flex items-center justify-between mb-4">
+        <%= f.label :images, "Author Gallery", class: "block text-xs font-bold text-stone-400 uppercase" %>
+        <span class="text-[10px] text-stone-400">Select multiple images</span>
+      </div>
+  
+      <%= f.file_field :images, multiple: true, accept: 'image/*', 
+          class: "block w-full text-xs text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer" %>
+      
+      <% if author.images.attached? %>
+        <div class="mt-6 flex flex-wrap gap-4 border-t border-stone-200 pt-6">
+          <% author.images.each do |image| %>
+            <div class="relative">
+              <%= image_tag image.variant(resize_to_limit: [100, 100]), class: "rounded-lg border border-stone-200 shadow-sm" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  
+    <div class="pt-4">
+      <%= f.submit class: "w-full bg-stone-900 text-white py-4 rounded-xl font-bold hover:bg-stone-800 transition active:scale-95 cursor-pointer shadow-lg shadow-stone-200" %>
+    </div>
+  <% end %>

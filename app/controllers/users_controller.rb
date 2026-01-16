@@ -46,7 +46,7 @@ class UsersController < ApplicationController
           csv << [
             order.id,
             item.book.title,
-            item.book.author,
+            item.book.author.name,
             item.quantity,
             item.price,
             order.created_at.strftime("%Y-%m-%d %H:%M")

@@ -19,7 +19,7 @@
     <%= form_with url: admin_impersonations_path, method: :post, class: "max-w-md mx-auto flex gap-3" do |f| %>
       <div class="flex-1">
         <%= f.select :user_id, 
-            User.all.map { |u| ["#{u.username} (#{u.email})", u.id] }, 
+            @users.map { |u| ["#{u.username || 'No Username'} (#{u.email})", u.id] }, 
             { include_blank: "Search for a user..." }, 
             { id: "impersonate-select", class: "w-full" } %>
       </div>

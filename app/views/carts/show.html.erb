@@ -14,7 +14,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <h3 class="font-bold text-stone-900 text-lg"><%= item.book.title %></h3>
-                  <p class="text-stone-500 text-sm">by <%= item.book.author %></p>
+                  <p class="text-stone-500 text-sm">by <%= item.book.author.name %></p>
                 </div>
                 <p class="font-bold text-stone-900">Rs. <%= number_with_precision(item.subtotal, precision: 2) %></p>
               </div>

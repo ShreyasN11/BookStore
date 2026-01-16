@@ -4,7 +4,11 @@ class Admin::UsersController < AdminController
 
 
     def index
-      @users = User.all
+      if current_user.superadmin?
+        @users = User.all
+      else
+        @users = User.customer
+      end
     end
 
     def show

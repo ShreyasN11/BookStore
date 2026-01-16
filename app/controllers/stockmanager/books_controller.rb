@@ -44,7 +44,7 @@ class Stockmanager::BooksController < StockmanagerController
       csv_data = CSV.generate(headers: true) do |csv|
         csv << [ "Title", "Author", "Description", "Price", "ISBN", "Published Year", "Quantity", "Genre", "Created At" ]
         books.each do |book|
-          csv << [ book.title, book.author, book.description, book.price, book.isbn, book.published_year, book.quantity, book.genre, book.created_at ]
+          csv << [ book.title, book.author.name, book.description, book.price, book.isbn, book.published_year, book.quantity, book.genre, book.created_at ]
         end
       end
     end
