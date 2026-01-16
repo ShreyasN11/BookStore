@@ -1,6 +1,6 @@
 class Scraper
   BASE_URL = "https://openlibrary.org/search.json"
-  QUERY = "ruby"
+  QUERY = "India"
   PER_DAY = 10
 
   def call
@@ -36,8 +36,13 @@ class Scraper
       book = Book.find_or_initialize_by(isbn: external_id)
       next if book.persisted?
 
+      author_name = b["author_name"]&.first || "Unknown"
+      author_name = author_name.strip
+
+      author = Author.find_or_create_by!(name: author_name)
+
       book.title = b["title"]
-      book.author = b["author_name"]&.first || "Unknown"
+      book.author = author
       book.published_year = b["first_publish_year"]
       book.description = "Imported from OpenLibrary"
       book.price = rand(300..900)
