@@ -63,7 +63,7 @@ class Stockmanager::BooksController < StockmanagerController
         CSV.foreach(file.path, headers: true) do |row|
           book = Book.find_or_initialize_by(isbn: row["ISBN"])
 
-          book.update!(title: row["Title"], author: row["Author"], description: row["Description"], price: row["Price"], published_year: row["Published Year"], quantity: row["Quantity"], genre: row["Genre"], created_at: Time.current)
+          book.update!(title: row["Title"], author_name: row["Author"], description: row["Description"], price: row["Price"], published_year: row["Published Year"], quantity: row["Quantity"], genre: row["Genre"], created_at: Time.current)
         end
         redirect_to stockmanager_books_path, notice: "Books imported/updated successfully."
       rescue => e
@@ -74,6 +74,6 @@ class Stockmanager::BooksController < StockmanagerController
     private
 
     def book_params
-      params.require(:book).permit(:title, :author, :description, :price, :isbn, :published_year, :quantity, :genre, images: [])
+      params.require(:book).permit(:title, :author_name, :description, :price, :isbn, :published_year, :quantity, :genre, images: [])
     end
 end
